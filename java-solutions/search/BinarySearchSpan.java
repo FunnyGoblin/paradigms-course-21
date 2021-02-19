@@ -34,6 +34,7 @@ public class BinarySearchSpan {
 
     // Inv:l < r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
     public static int lastX(int[] a, int l, int r, int x) {
+        assert r > l;
         if (l + 1 == r) {
             //l + 1 == r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
             return l;
@@ -55,7 +56,7 @@ public class BinarySearchSpan {
         return lastX(a, -1, a.length, x);
     }
 
-    //Pred: args != null && args[i] > args[i + 1]: (i > 0 && i + 1 < args.length)
+    //Pred: args != null && args.length > 0 && args[i] > args[i + 1]: (i > 0 && i + 1 < args.length)
     public static void main(String[] args) {
         Objects.requireNonNull(args);
         int x = Integer.parseInt(args[0]);
