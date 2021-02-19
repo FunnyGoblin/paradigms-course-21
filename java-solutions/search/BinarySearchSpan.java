@@ -34,6 +34,7 @@ public class BinarySearchSpan {
 
     // Inv:l < r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
     public static int lastX(int[] a, int l, int r, int x) {
+        assert r <= l;
         if (l + 1 == r) {
             //l + 1 == r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
             return l;
