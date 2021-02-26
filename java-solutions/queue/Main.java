@@ -5,6 +5,7 @@ public class Main {
     public static void main(String[] args) {
         //ArrayQueueModule
         {
+            System.out.println("ArrayQueueModule:\n");
             for (int i = 2; i < 5; i++) {
                 ArrayQueueModule.enqueue(i * 7);
                 ArrayQueueModule.push(-i * 7);
@@ -16,6 +17,7 @@ public class Main {
         }
         //ArrayQueueADT
         {
+            System.out.println("ArrayQueueADT:\n");
             ArrayQueueADT q = ArrayQueueADT.create();
             for (int i = 0; i < 15; i++) {
                 if (i % 2 == 0) {
@@ -32,6 +34,7 @@ public class Main {
         }
         //ArrayQueue
         {
+            System.out.println("ArrayQueue:\n");
             ArrayQueue q = new ArrayQueue();
             for (int i = 0; i < 15; i++) {
                 if (i % 2 == 0) {
