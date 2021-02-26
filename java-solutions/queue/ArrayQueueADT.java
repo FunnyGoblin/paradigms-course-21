@@ -26,6 +26,7 @@ public class ArrayQueueADT {
     }
 
     private static void ensureCapacity(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         int n = deq.elements.length;
         if (n == deq.size) {
             deq.elements = Arrays.copyOf(deq.elements, 2 * n);
@@ -40,6 +41,7 @@ public class ArrayQueueADT {
     //Pred: x != null
     //Post : n = n' + 1 && a[n] == x && forall i = 1..n': a[i] == a[i]'
     public static void enqueue(ArrayQueueADT deq, Object x) {
+        Objects.requireNonNull(deq);
         Objects.requireNonNull(x);
         ensureCapacity(deq);
         deq.elements[deq.tail++] = x;
@@ -52,6 +54,7 @@ public class ArrayQueueADT {
     //Pred: x != null
     //Post: n == n' + 1 && a[1] == x && forall i = 2..n a[i] == a[i - 1]'
     public static void push(ArrayQueueADT deq, Object x) {
+        Objects.requireNonNull(deq);
         Objects.requireNonNull(x);
         ensureCapacity(deq);
         --deq.head;
@@ -65,6 +68,7 @@ public class ArrayQueueADT {
     //Pred: n > 0
     //Post :R == a[1] && Immutable
     public static Object element(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         assert deq.size > 0;
         return deq.elements[deq.head];
     }
@@ -72,6 +76,7 @@ public class ArrayQueueADT {
     //Pred: n > 0
     //Post: R == a[n] && Immutable
     public static Object peek(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         assert deq.size > 0;
         return deq.elements[(deq.tail - 1 + deq.elements.length) % deq.elements.length];
     }
@@ -79,6 +84,7 @@ public class ArrayQueueADT {
     //Pred: n > 0
     //Post : n == n' - 1 && forall i = 1..n: a[i] == a[i+1]' && R == a[1]'
     public static Object dequeue(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         assert deq.size > 0;
         Object r = deq.elements[deq.head];
         deq.elements[deq.head++] = null;
@@ -92,6 +98,7 @@ public class ArrayQueueADT {
     //Pred: n > 0;
     //Post: n == n' - 1 && forall i = 1..n: a[i] == a[i]' && R == a[n']'
     public static Object remove(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         assert deq.size > 0;
         deq.tail--;
         if (deq.tail < 0) {
@@ -106,18 +113,21 @@ public class ArrayQueueADT {
     //Pred: true
     //Post :R == n && Immutable
     public static int size(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         return deq.size;
     }
 
     //Pred: true
     //Post :R == [n > 0] && Immutable
     public static boolean isEmpty(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         return deq.size == 0;
     }
 
     //Pred: true
     //Post:
     public static void clear(ArrayQueueADT deq) {
+        Objects.requireNonNull(deq);
         while (!isEmpty(deq)) {
             dequeue(deq);
         }
