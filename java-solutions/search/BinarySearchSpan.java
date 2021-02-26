@@ -6,7 +6,7 @@ public class BinarySearchSpan {
 
     //Pred:a[i] > a[i + 1]: i + 1 < n
     //Post:a[R] <= x && (R == 0 || a[R - 1] > x) || R == n
-    public static int firstX(int[] a, int x){
+    public static int firstX(final int[] a, int x){
         //Pred: a[i] > a[i + 1]: i + 1 < n
         int l = -1;
         //l = -1
@@ -33,8 +33,7 @@ public class BinarySearchSpan {
     }
 
     // Inv:l < r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
-    public static int lastX(int[] a, int l, int r, int x) {
-        assert r > l;
+    public static int lastX(final int[] a, int l, int r, int x) {
         if (l + 1 == r) {
             //l + 1 == r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
             return l;
@@ -51,7 +50,7 @@ public class BinarySearchSpan {
 
     //Pred:a[i] > a[i + 1]: i + 1 < n
     //Post:a[R] >= x && (R == n || a[R + 1] < x) || R == n
-    public static int runLastX(int[] a, int x){
+    public static int runLastX(final int[] a, int x){
         //l < r && l == -1 && r == n
         return lastX(a, -1, a.length, x);
     }
