@@ -16,13 +16,15 @@ Immutable:
     n == n' && forall i = 1..n: a[i] = a'[i]
 */
 public class ArrayQueueModule {
-    private static int size = 0, head = 0, tail = 0;
+    // :NOTE: do you really need 3 fields? I don't think so. Get rid of 1 of them
+    private static int size = 0, head = 0, tail = 0;  
     private static Object[] elements = new Object[2];
 
     private static void ensureCapacity(){
         int n = elements.length;
         if (n == size){
             elements = Arrays.copyOf(elements, 2 * n);
+            // :NOTE: copy array by elements in cycle is slow. Improve it
             for(int i = 0; i < head; i++){
                 elements[i + n] = elements[i];
                 elements[i] = null;
@@ -109,6 +111,7 @@ public class ArrayQueueModule {
         return size == 0;
     }
 
+    // :NOTE: post conditions is empty? Hard disc is formated
     //Pred: true
     //Post:
     public static void clear(){

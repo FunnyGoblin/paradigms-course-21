@@ -37,7 +37,8 @@ public class ArrayQueueADT {
             deq.tail = deq.head + n;
         }
     }
-
+    
+    // :NOTE: requirement of `deq` not null in `Pred` conditions? Do the same for both arguments
     //Pred: x != null
     //Post : n = n' + 1 && a[n] == x && forall i = 1..n': a[i] == a[i]'
     public static void enqueue(ArrayQueueADT deq, Object x) {

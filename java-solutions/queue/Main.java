@@ -1,5 +1,7 @@
 package queue;
 
+// :NOTE: JAR with tests in repository
+
 public class Main {
 
     public static void main(String[] args) {
