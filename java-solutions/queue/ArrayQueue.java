@@ -17,35 +17,30 @@ Immutable:
 */
 
 public class ArrayQueue {
-    private int size, head, tail;
+    private int size, head;
     private Object[] elements;
 
     public ArrayQueue() {
-        size = head = tail = 0;
+        size = head = 0;
         elements = new Object[2];
     }
 
     private void ensureCapacity() {
         int n = elements.length;
         if (n == size) {
-            elements = Arrays.copyOf(elements, 2 * n);
-            for (int i = 0; i < head; i++) {
-                elements[i + n] = elements[i];
-                elements[i] = null;
-            }
-            tail = head + n;
+            Object[] nw = Arrays.copyOfRange(elements, head, elements.length * 2);
+            System.arraycopy(elements, 0, nw, elements.length - head, head);
+            head = 0;
+            elements = nw;
         }
     }
 
     //Pred: x != null
-    //Post : n = n' + 1 && a[n] == x && forall i = 1..n': a[i] == a[i]'
+    //Post: n = n' + 1 && a[n] == x && forall i = 1..n': a[i] == a[i]'
     public void enqueue(Object x) {
         Objects.requireNonNull(x);
         ensureCapacity();
-        elements[tail++] = x;
-        if (tail == elements.length) {
-            tail = 0;
-        }
+        elements[(head + size) % elements.length] = x;
         size++;
     }
 
@@ -63,7 +58,7 @@ public class ArrayQueue {
     }
 
     //Pred: n > 0
-    //Post :R == a[1] && Immutable
+    //Post: R == a[1] && Immutable
     public Object element() {
         assert size > 0;
         return elements[head];
@@ -73,11 +68,11 @@ public class ArrayQueue {
     //Post: R == a[n] && Immutable
     public Object peek() {
         assert size > 0;
-        return elements[(tail - 1 + elements.length) % elements.length];
+        return elements[(head + size - 1) % elements.length];
     }
 
     //Pred: n > 0
-    //Post : n == n' - 1 && forall i = 1..n: a[i] == a[i+1]' && R == a[1]'
+    //Post: n == n' - 1 && forall i = 1..n: a[i] == a[i+1]' && R == a[1]'
     public Object dequeue() {
         assert size > 0;
         Object r = elements[head];
@@ -93,33 +88,28 @@ public class ArrayQueue {
     //Post: n == n' - 1 && forall i = 1..n: a[i] == a[i]' && R == a[n']'
     public Object remove() {
         assert size > 0;
-        tail--;
-        if (tail < 0) {
-            tail = elements.length - 1;
-        }
-        Object r = elements[tail];
-        elements[tail] = null;
         size--;
+        Object r = elements[(head + size) % elements.length];
+        elements[(head + size) % elements.length] = null;
         return r;
     }
 
     //Pred: true
-    //Post :R == n && Immutable
+    //Post: R == n && Immutable
     public int size() {
         return size;
     }
 
     //Pred: true
-    //Post :R == [n > 0] && Immutable
+    //Post: R == [n > 0] && Immutable
     public boolean isEmpty() {
         return size == 0;
     }
 
     //Pred: true
-    //Post:
+    //Post: size == 0
     public void clear() {
-        while (!isEmpty()) {
-            dequeue();
-        }
+        Arrays.fill(elements, null);
+        size = head = 0;
     }
 }

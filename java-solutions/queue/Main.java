@@ -1,7 +1,5 @@
 package queue;
 
-// :NOTE: JAR with tests in repository
-
 public class Main {
 
     public static void main(String[] args) {
@@ -19,7 +17,7 @@ public class Main {
         }
         //ArrayQueueADT
         {
-            System.out.println("ArrayQueueADT:\n");
+            System.out.println("\nArrayQueueADT:\n");
             ArrayQueueADT q = ArrayQueueADT.create();
             for (int i = 0; i < 15; i++) {
                 if (i % 2 == 0) {
@@ -36,7 +34,7 @@ public class Main {
         }
         //ArrayQueue
         {
-            System.out.println("ArrayQueue:\n");
+            System.out.println("\nArrayQueue:\n");
             ArrayQueue q = new ArrayQueue();
             for (int i = 0; i < 15; i++) {
                 if (i % 2 == 0) {
