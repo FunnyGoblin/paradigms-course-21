@@ -33,7 +33,7 @@ public class BinarySearchSpan {
         return r;
     }
 
-    //Pred:a[i] > a[i + 1]: i + 1 < n && l < r && (a[l] >= x || l == -1) && (a[r] < x || r == n)
+    //Pred:a[i] > a[i + 1]: i + 1 < n && -1 <= l < r <= n && (a[l] >= x || l == -1) && (a[r] < x || r == n)
     //Post:a[R] >= x && (R == n || a[R + 1] < x) || R == n
     public static int lastX(final int[] a, int l, int r, int x) {
         if (l + 1 == r) {
@@ -43,12 +43,16 @@ public class BinarySearchSpan {
         int mid = (r + l) / 2;
         //mid = (r + l) / 2 && l < mid < r
         if (a[mid] >= x) {
-            //mid < r && a[mid] >= x && (a[r] < x || r == n)
-            //:NOTE: pre/post
+            //mid < r && a[mid] >= x && (a[r] < x || r == n) && r - mid ~ (r - l) / 2
+            //l = mid
+            //Pred:a[i] > a[i + 1]: i + 1 < n && -1 < mid r <= n && a[mid] >= x && (a[r] < x || r == n)
+            //Post:a[R] >= x && (R == n || a[R + 1] < x) || R == n
             return lastX(a, mid, r, x);
         }
-        //l < mid && (a[l] >= x || l == -1) && a[mid] < x
-        //:NOTE: pre/post
+        //l < mid && (a[l] >= x || l == -1) && a[mid] < x && mid - l ~ (r - l) / 2
+        //r = mid
+        //Pred:a[i] > a[i + 1]: i + 1 < n && -1 <= l < mid < n && (a[l] >= x || l == -1) && a[r] < x
+        //Post:a[R] >= x && (R == n || a[R + 1] < x) || R == n
         return lastX(a, l, mid, x);
     }
 
