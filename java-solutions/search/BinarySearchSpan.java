@@ -13,7 +13,7 @@ public class BinarySearchSpan {
         int r = a.length;
         //r = n
         //Pred:a[i] > a[i + 1]: i >= 0 && i + 1 < n && l = -1 && r = n
-        //Inv: (a[l] > x || l == -1) && (a[r] <= x || r == n) && r > l
+        //Inv:  length >= r > l >= -1  && (a[l] > x || l == -1) && (a[r] <= x || r == n)
         while (r - l > 1) {
             //r - l > 1 && (a[l] > x || l == -1) && (a[r] <= x || r == n)
             int mid = (r + l) / 2;
@@ -51,7 +51,7 @@ public class BinarySearchSpan {
         }
         //l < mid && (a[l] >= x || l == -1) && a[mid] < x && mid - l ~ (r - l) / 2
         //r = mid
-        //Pred:a[i] > a[i + 1]: i + 1 < n && -1 <= l < mid < n && (a[l] >= x || l == -1) && a[r] < x
+        //Pred:a[i] > a[i + 1]: i + 1 < n && -1 <= l < mid < n && (a[l] >= x || l == -1) && a[mid] < x
         //Post:a[R] >= x && (R == n || a[R + 1] < x) || R == n
         return lastX(a, l, mid, x);
     }
