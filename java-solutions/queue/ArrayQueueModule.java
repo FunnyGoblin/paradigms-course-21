@@ -7,7 +7,6 @@ import java.util.Objects;
 Model:
     [a1, a2, a3, ...an]
     n -- size of deque
-    elements[head] == a[1] && elements[head + 1] == a[2] && ... && elements[tail - 1] == a[n]
 
 Inv:
     n >= 0
@@ -19,6 +18,10 @@ Immutable:
 public class ArrayQueueModule {
     private static int size = 0, head = 0;
     private static Object[] elements = new Object[2];
+
+    private static int getTail(){
+        return (head + size) % elements.length;
+    }
 
     private static void ensureCapacity() {
         int n = elements.length;
@@ -35,7 +38,7 @@ public class ArrayQueueModule {
     public static void enqueue(Object x) {
         Objects.requireNonNull(x);
         ensureCapacity();
-        elements[(head + size) % elements.length] = x;
+        elements[getTail()] = x;
         size++;
     }
 
@@ -63,7 +66,7 @@ public class ArrayQueueModule {
     //Post: R == a[n] && Immutable
     public static Object peek() {
         assert size > 0;
-        return elements[(head + size - 1) % elements.length];
+        return elements[(getTail() - 1 + elements.length) % elements.length];
     }
 
     //Pred: n > 0
@@ -84,8 +87,8 @@ public class ArrayQueueModule {
     public static Object remove() {
         assert size > 0;
         size--;
-        Object r = elements[(head + size) % elements.length];
-        elements[(head + size) % elements.length] = null;
+        Object r = elements[getTail()];
+        elements[getTail()] = null;
         return r;
     }
 
@@ -102,7 +105,7 @@ public class ArrayQueueModule {
     }
 
     //Pred: true
-    //Post: size = 0
+    //Post: n == 0
     public static void clear() {
         Arrays.fill(elements, null);
         size = head = 0;

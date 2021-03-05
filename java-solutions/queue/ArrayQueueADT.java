@@ -25,6 +25,12 @@ public class ArrayQueueADT {
         return new ArrayQueueADT();
     }
 
+
+    private static int getTail(ArrayQueueADT deq){
+        Objects.requireNonNull(deq);
+        return (deq.head + deq.size) % deq.elements.length;
+    }
+
     private static void ensureCapacity(ArrayQueueADT deq) {
         Objects.requireNonNull(deq);
         int n = deq.elements.length;
@@ -42,7 +48,7 @@ public class ArrayQueueADT {
         Objects.requireNonNull(deq);
         Objects.requireNonNull(x);
         ensureCapacity(deq);
-        deq.elements[(deq.head + deq.size) % deq.elements.length] = x;
+        deq.elements[getTail(deq)] = x;
         deq.size++;
     }
 
@@ -73,7 +79,7 @@ public class ArrayQueueADT {
     public static Object peek(ArrayQueueADT deq) {
         Objects.requireNonNull(deq);
         assert deq.size > 0;
-        return deq.elements[(deq.head + deq.size - 1) % deq.elements.length];
+        return deq.elements[(getTail(deq) - 1 + deq.elements.length) % deq.elements.length];
     }
 
     //Pred: n > 0 && deq != null
@@ -96,8 +102,8 @@ public class ArrayQueueADT {
         Objects.requireNonNull(deq);
         assert deq.size > 0;
         deq.size--;
-        Object r = deq.elements[(deq.head + deq.size) % deq.elements.length];
-        deq.elements[(deq.head + deq.size) % deq.elements.length] = null;
+        Object r = deq.elements[getTail(deq)];
+        deq.elements[getTail(deq)] = null;
         return r;
     }
 
@@ -116,7 +122,7 @@ public class ArrayQueueADT {
     }
 
     //Pred: deq != null
-    //Post: size == 0
+    //Post: n == 0
     public static void clear(ArrayQueueADT deq) {
         Arrays.fill(deq.elements, null);
         deq.size = deq.head = 0;

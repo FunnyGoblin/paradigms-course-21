@@ -40,7 +40,7 @@ public class ArrayQueue {
     public void enqueue(Object x) {
         Objects.requireNonNull(x);
         ensureCapacity();
-        elements[(head + size) % elements.length] = x;
+        elements[getTail()] = x;
         size++;
     }
 
@@ -64,11 +64,15 @@ public class ArrayQueue {
         return elements[head];
     }
 
+    private int getTail(){
+        return (head + size) % elements.length;
+    }
+
     //Pred: n > 0
-    //Post: R == a[n] && Immutable
+    //Post: R == a[n] && Immutable      0 0 1 1 1 1 1 0
     public Object peek() {
         assert size > 0;
-        return elements[(head + size - 1) % elements.length];
+        return elements[(getTail() - 1 + elements.length) % elements.length];
     }
 
     //Pred: n > 0
@@ -89,8 +93,8 @@ public class ArrayQueue {
     public Object remove() {
         assert size > 0;
         size--;
-        Object r = elements[(head + size) % elements.length];
-        elements[(head + size) % elements.length] = null;
+        Object r = elements[getTail()];
+        elements[getTail()] = null;
         return r;
     }
 
@@ -107,7 +111,7 @@ public class ArrayQueue {
     }
 
     //Pred: true
-    //Post: size == 0
+    //Post: n == 0
     public void clear() {
         Arrays.fill(elements, null);
         size = head = 0;
