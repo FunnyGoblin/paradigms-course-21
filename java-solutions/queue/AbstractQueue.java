@@ -40,6 +40,7 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
         for (Object e : this) {
             if (e.equals(x)) {
                 res = true;
+                break;
             }
         }
         return res;
@@ -50,7 +51,7 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
         AbstractQueue q = getInstance();
         for (Object e : this) {
             if (res || !e.equals(x)) {
-                q.enqueue(x);
+                q.enqueue(e);
             } else {
                 res = true;
             }
