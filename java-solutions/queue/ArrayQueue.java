@@ -1,28 +1,20 @@
 package queue;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 
-/*
-Model:
-    [a1, a2, a3, ...an]
-    n -- size of deque
-
-Inv:
-    n >= 0
-    forall i = 1..n: a[i] != null
-
-Immutable:
-    n == n' && forall i = 1..n: a[i] = a'[i]
-*/
-
-public class ArrayQueue {
-    private int size, head;
+public class ArrayQueue extends AbstractQueue {
+    private int head;
     private Object[] elements;
 
     public ArrayQueue() {
         size = head = 0;
         elements = new Object[2];
+    }
+
+    public AbstractQueue getInstance() {
+        return new ArrayQueue();
     }
 
     private void ensureCapacity() {
@@ -35,17 +27,11 @@ public class ArrayQueue {
         }
     }
 
-    //Pred: x != null
-    //Post: n = n' + 1 && a[n] == x && forall i = 1..n': a[i] == a[i]'
-    public void enqueue(Object x) {
-        Objects.requireNonNull(x);
+    public void enqueueImpl(Object x) {
         ensureCapacity();
         elements[getTail()] = x;
-        size++;
     }
 
-    //Pred: x != null
-    //Post: n == n' + 1 && a[1] == x && forall i = 2..n a[i] == a[i - 1]'
     public void push(Object x) {
         Objects.requireNonNull(x);
         ensureCapacity();
@@ -57,39 +43,29 @@ public class ArrayQueue {
         size++;
     }
 
-    //Pred: n > 0
-    //Post: R == a[1] && Immutable
     public Object element() {
         assert size > 0;
         return elements[head];
     }
 
-    private int getTail(){
+    private int getTail() {
         return (head + size) % elements.length;
     }
 
-    //Pred: n > 0
-    //Post: R == a[n] && Immutable      0 0 1 1 1 1 1 0
     public Object peek() {
         assert size > 0;
         return elements[(getTail() - 1 + elements.length) % elements.length];
     }
 
-    //Pred: n > 0
-    //Post: n == n' - 1 && forall i = 1..n: a[i] == a[i+1]' && R == a[1]'
-    public Object dequeue() {
-        assert size > 0;
+    public Object dequeueImpl() {
         Object r = elements[head];
         elements[head++] = null;
         if (head == elements.length) {
             head = 0;
         }
-        size--;
         return r;
     }
 
-    //Pred: n > 0;
-    //Post: n == n' - 1 && forall i = 1..n: a[i] == a[i]' && R == a[n']'
     public Object remove() {
         assert size > 0;
         size--;
@@ -98,22 +74,25 @@ public class ArrayQueue {
         return r;
     }
 
-    //Pred: true
-    //Post: R == n && Immutable
-    public int size() {
-        return size;
-    }
-
-    //Pred: true
-    //Post: R == [n > 0] && Immutable
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    //Pred: true
-    //Post: n == 0
     public void clear() {
         Arrays.fill(elements, null);
         size = head = 0;
+    }
+
+    @Override
+    public Iterator<Object> iterator() {
+        return new Iterator<>() {
+            private int pointer = 0;
+
+            @Override
+            public boolean hasNext() {
+                return pointer < size;
+            }
+
+            @Override
+            public Object next() {
+                return elements[(head + pointer++) % elements.length];
+            }
+        };
     }
 }
