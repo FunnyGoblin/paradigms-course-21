@@ -14,9 +14,6 @@ Immutable:
 */
 
 
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 public interface Queue {
     //Pred: true
     //Post: R == n
