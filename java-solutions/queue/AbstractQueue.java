@@ -50,7 +50,7 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
         AbstractQueue q = getInstance();
         for (Object e : this) {
             if (res || !e.equals(x)) {
-                enqueue(x);
+                q.enqueue(x);
             } else {
                 res = true;
             }
