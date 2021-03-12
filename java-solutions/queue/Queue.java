@@ -47,7 +47,7 @@ public interface Queue {
 
     //Pred: true
     //Post: let I be the first position where a[I] == x
-    // if I exist then R == true &&  n == n' - 1 && forall i = 1..I-1 a[i] == a'[i] && forall i = I..n a[i] == a'[i - 1]
+    // if I exist then R == true &&  n == n' - 1 && forall i = 1..I-1 a[i] == a'[i] && forall i = I..n a[i] == a'[i + 1]
     // else R == false && Immutable
     boolean removeFirstOccurrence(Object x);
 }
