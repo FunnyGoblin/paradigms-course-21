@@ -35,37 +35,31 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
 
     abstract AbstractQueue getInstance();
 
-    public boolean contains(Object x){
+    public boolean contains(Object x) {
         boolean res = false;
-        for (Object e: this) {
-            if(e.equals(x)){
+        for (Object e : this) {
+            if (e.equals(x)) {
                 res = true;
             }
         }
         return res;
     }
 
-    public boolean removeFirstOccurrence(Object x){
+    public boolean removeFirstOccurrence(Object x) {
         boolean res = false;
         AbstractQueue q = getInstance();
-        for(Object e: this){
-            if(e.equals(x)){
-                if(res){
-                    q.enqueue(e);
-                }
-                else{
-                    res = true;
-                }
-            }
-            else{
-                q.enqueue(e);
+        for (Object e : this) {
+            if (res || !e.equals(x)) {
+                enqueue(x);
+            } else {
+                res = true;
             }
         }
-        if(!res){
+        if (!res) {
             return false;
         }
         this.clear();
-        for(Object e: q){
+        for (Object e : q) {
             this.enqueue(e);
         }
         return true;
