@@ -36,33 +36,30 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
         }
     }
 
-    public int firstX(Object x){
-        int i = 0;
-        for (Object e: this) {
-            if(e.equals(x)){
-                return i;
+    public boolean findX(Object x, boolean delete){
+        int n = size, res = n;
+        boolean deleted = !delete;
+        for(int i = 0; i < n; ++i){
+            if(x.equals(element())){
+                res = i;
+                if(deleted){
+                   enqueue(element());
+                }
+                deleted = true;
             }
-            i++;
-        }
-        return i;
-    }
-
-    public boolean contains(Object x) {
-        return firstX(x) < size;
-    }
-
-    public boolean removeFirstOccurrence(Object x) {
-        int pos = firstX(x);
-        if (pos == size) {
-            return false;
-        }
-        int n = size;
-        for(int i = 0; i < n; i++){
-            if(i != pos){
+            else{
                 enqueue(element());
             }
             dequeue();
         }
-        return true;
+        return res < n;
+    }
+
+    public boolean contains(Object x) {
+        return findX(x, false);
+    }
+
+    public boolean removeFirstOccurrence(Object x) {
+        return findX(x, true);
     }
 }
