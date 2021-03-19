@@ -45,23 +45,4 @@ public class LinkedQueue extends AbstractQueue {
         }
         return r;
     }
-
-    @Override
-    public Iterator<Object> iterator() {
-        return new Iterator<>() {
-            private Node pointer = head;
-
-            @Override
-            public boolean hasNext() {
-                return pointer != null;
-            }
-
-            @Override
-            public Object next() {
-                Object r = pointer.value;
-                pointer = pointer.next;
-                return r;
-            }
-        };
-    }
 }

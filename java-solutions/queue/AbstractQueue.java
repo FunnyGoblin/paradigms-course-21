@@ -2,7 +2,7 @@ package queue;
 
 import java.util.Objects;
 
-public abstract class AbstractQueue implements Queue, Iterable<Object> {
+public abstract class AbstractQueue implements Queue {
     protected int size = 0;
 
     public int size() {

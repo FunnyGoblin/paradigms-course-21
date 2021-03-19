@@ -56,21 +56,4 @@ public class ArrayQueue extends AbstractQueue {
         }
         return r;
     }
-
-    @Override
-    public Iterator<Object> iterator() {
-        return new Iterator<>() {
-            private int pointer = 0;
-
-            @Override
-            public boolean hasNext() {
-                return pointer < size;
-            }
-
-            @Override
-            public Object next() {
-                return elements[(head + pointer++) % elements.length];
-            }
-        };
-    }
 }
