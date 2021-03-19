@@ -59,7 +59,6 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
         if (pos == size) {
             return false;
         }
-        AbstractQueue q = getInstance();
         int n = size;
         for(int i = 0; i < n; i++){
             if(i != pos){
