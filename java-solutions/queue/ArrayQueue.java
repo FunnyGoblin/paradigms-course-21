@@ -52,11 +52,6 @@ public class ArrayQueue extends AbstractQueue {
         return (head + size) % elements.length;
     }
 
-    public Object peek() {
-        assert size > 0;
-        return elements[(getTail() - 1 + elements.length) % elements.length];
-    }
-
     public Object dequeueImpl() {
         Object r = elements[head];
         elements[head++] = null;
@@ -64,19 +59,6 @@ public class ArrayQueue extends AbstractQueue {
             head = 0;
         }
         return r;
-    }
-
-    public Object remove() {
-        assert size > 0;
-        size--;
-        Object r = elements[getTail()];
-        elements[getTail()] = null;
-        return r;
-    }
-
-    public void clear() {
-        Arrays.fill(elements, null);
-        size = head = 0;
     }
 
     @Override

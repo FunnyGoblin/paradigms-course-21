@@ -1,5 +1,6 @@
 package queue;
 
+import java.util.Iterator;
 import java.util.Objects;
 
 public abstract class AbstractQueue implements Queue, Iterable<Object> {
@@ -22,46 +23,49 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
 
     public Object dequeue() {
         assert size > 0;
-        Object r = dequeueImpl();
         size--;
-        return r;
+        return dequeueImpl();
     }
 
     abstract Object dequeueImpl();
 
     public abstract Object element();
 
-    public abstract void clear();
+    public void clear(){
+        while (!isEmpty()){
+            this.dequeue();
+        }
+    }
 
     abstract AbstractQueue getInstance();
 
-    public boolean contains(Object x) {
-        boolean res = false;
-        for (Object e : this) {
-            if (e.equals(x)) {
-                res = true;
-                break;
+    public int firstX(Object x){
+        int i = 0;
+        for (Object e: this) {
+            if(e.equals(x)){
+                return i;
             }
+            i++;
         }
-        return res;
+        return i;
+    }
+
+    public boolean contains(Object x) {
+        return firstX(x) < size;
     }
 
     public boolean removeFirstOccurrence(Object x) {
-        boolean res = false;
-        AbstractQueue q = getInstance();
-        for (Object e : this) {
-            if (res || !e.equals(x)) {
-                q.enqueue(e);
-            } else {
-                res = true;
-            }
-        }
-        if (!res) {
+        int pos = firstX(x);
+        if (pos == size) {
             return false;
         }
-        this.clear();
-        for (Object e : q) {
-            this.enqueue(e);
+        AbstractQueue q = getInstance();
+        int n = size;
+        for(int i = 0; i < n; i++){
+            if(i != pos){
+                enqueue(element());
+            }
+            dequeue();
         }
         return true;
     }

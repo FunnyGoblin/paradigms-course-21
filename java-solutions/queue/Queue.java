@@ -40,9 +40,7 @@ public interface Queue {
     void clear();
 
     //Pred: true
-    //Post: Immutable
-    //      && if exist i: a[i] == x => R == true
-    //      else R == false
+    //Post: Immutable && R == (exist i: a[i] == x)
     boolean contains(Object x);
 
     //Pred: true

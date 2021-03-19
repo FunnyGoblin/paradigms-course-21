@@ -23,15 +23,17 @@ public class LinkedQueue extends AbstractQueue {
         return new LinkedQueue();
     }
 
+
+
     public void enqueueImpl(Object x) {
         Node newTail = new Node(x, null);
         if (tail != null) {
             tail.setNext(newTail);
         }
-        tail = newTail;
-        if (head == null) {
-            head = tail;
+        else {
+            head = newTail;
         }
+        tail = newTail;
     }
 
     public Object element() {
@@ -41,13 +43,13 @@ public class LinkedQueue extends AbstractQueue {
 
     public Object dequeueImpl() {
         Object r = head.value;
-        head = head.next;
+        if(size == 0){
+            head = tail = null;
+        }
+        else {
+            head = head.next;
+        }
         return r;
-    }
-
-    public void clear() {
-        size = 0;
-        head = tail = null;
     }
 
     @Override
