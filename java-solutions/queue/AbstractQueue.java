@@ -1,6 +1,5 @@
 package queue;
 
-import java.util.Iterator;
 import java.util.Objects;
 
 public abstract class AbstractQueue implements Queue, Iterable<Object> {
@@ -36,8 +35,6 @@ public abstract class AbstractQueue implements Queue, Iterable<Object> {
             this.dequeue();
         }
     }
-
-    abstract AbstractQueue getInstance();
 
     public int firstX(Object x){
         int i = 0;

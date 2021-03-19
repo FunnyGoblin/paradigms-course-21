@@ -19,12 +19,6 @@ public class LinkedQueue extends AbstractQueue {
         }
     }
 
-    public AbstractQueue getInstance() {
-        return new LinkedQueue();
-    }
-
-
-
     public void enqueueImpl(Object x) {
         Node newTail = new Node(x, null);
         if (tail != null) {

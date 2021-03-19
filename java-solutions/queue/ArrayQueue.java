@@ -13,10 +13,6 @@ public class ArrayQueue extends AbstractQueue {
         elements = new Object[2];
     }
 
-    public AbstractQueue getInstance() {
-        return new ArrayQueue();
-    }
-
     private void ensureCapacity() {
         int n = elements.length;
         if (n == size) {
