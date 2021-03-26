@@ -7,15 +7,17 @@ const process = (f, arr, neutral) => {
     return neutral;
 }
 
-const cnst = value => (...args) => value;
+// :NOTE: вынести общий код у операций
+const cnst = value => _ => value;
 const variable = (name) => (...args) => args[VARS[name]];
 const add = (op1, op2) => (...args) => op1(...args) + op2(...args);
 const subtract = (op1, op2) => (...args) => op1(...args) - op2(...args);
 const multiply = (op1, op2) => (...args) => op1(...args) * op2(...args);
-const divide = (op1, op2) => (...args) => op2(...args) == 0 ? Infinity : op1(...args) / op2(...args);
+const divide = (op1, op2) => (...args) => op2(...args) === 0 ? Infinity : op1(...args) / op2(...args);
 const negate = (op) => (...args) => -op(...args);
-const one = (...args) => 1;
-const two = (...args) => 2;
+const one = _ => 1;
+const two = _ => 2;
+// :NOTE: обобщить с бинарными операциями
 const min5 = (op1, op2, op3, op4, op5) => (...args) => process(Math.min, [op1(...args)
     , op2(...args)
     , op3(...args)
@@ -46,6 +48,7 @@ const VARS = {
 };
 
 const parse = expression => {
+    // :NOTE: костыль
     const tokens = expression.split(' ').filter(element => element.length !== 0);
     let stack = [];
     for(const token of tokens){
