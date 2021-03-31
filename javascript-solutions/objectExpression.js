@@ -132,7 +132,6 @@ Negate.prototype = {
 function Cube(op) {
     this.op = op;
 }
-
 Cube.prototype = {
     evaluate: function (...vars) {
         return this.op.evaluate(...vars) ** 3
@@ -157,7 +156,6 @@ Cube.prototype = {
 function Cbrt(op) {
     this.op = op;
 }
-
 Cbrt.prototype = {
     evaluate: function (...vars) {
         return Math.cbrt(this.op.evaluate(...vars))
@@ -205,19 +203,3 @@ const parse = expression => {
     }
     return stack.pop();
 }
-
-let e = new Multiply(
-    new Add(
-        new Const(1),
-        new Variable('x')
-    ),
-    new Divide(
-        new Const(1),
-        new Subtract(
-            new Variable('x'),
-            new Const(1)
-        )
-    )
-)
-
-e.evaluate(0, 0, 0)
