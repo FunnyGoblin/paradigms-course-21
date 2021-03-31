@@ -7,6 +7,7 @@ Const.prototype = {
         return this.value;
     },
     diff: function () {
+        // :NOTE: new Const(0)
         return new Const(0);
     },
     toString: function () {
@@ -29,6 +30,7 @@ Variable.prototype = {
         return args[VARS[this.name]];
     },
     diff: function (difVar) {
+        // :NOTE: new Const(0)
         return new Const(difVar === this.name ? 1 : 0);
     },
     toString: function () {
@@ -36,6 +38,7 @@ Variable.prototype = {
     }
 }
 
+// :NOTE: Обобщить
 function Binary(op1, op2, f) {
     this.left = op1;
     this.right = op2;
@@ -49,6 +52,7 @@ function binString(op, sign) {
     return op.left.toString() + " " + op.right.toString() + " " + sign;
 }
 
+// :NOTE:  const Add = makeOp('+', (a, b) => a + b, (difVar, left, right) => new Add(left.diff(difVar), right.diff(difVar)))
 function Add(op1, op2) {
     Binary.call(this, op1, op2, (a, b) => a + b);
 }
@@ -175,6 +179,7 @@ Cbrt.prototype = {
 }
 
 const OPS = {
+    // :NOTE:     '*': Multiply
     '*': [Multiply, 2],
     '+': [Add, 2],
     '-': [Subtract, 2],
@@ -190,6 +195,7 @@ const parse = expression => {
     for (const token of expression.trim().split(/\s+/)) {
         if (token in OPS) {
             const op = OPS[token];
+            // :NOTE: Array.splice
             let args = [];
             for (let i = 0; i < op[1]; i++) {
                 args.unshift(stack.pop());
