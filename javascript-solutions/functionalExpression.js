@@ -11,7 +11,7 @@ const operation = (f, ...args) => (...vars) =>{
     }
     return res;
 }
-
+// :NOTE: еще больше общего кода вынести
 const add = (...operands) => operation((a, b) => a + b, ...operands);
 const subtract = (...operands) => operation((a, b) => a - b, ...operands);
 const multiply = (...operands) => operation((a, b) => a * b, ...operands);
