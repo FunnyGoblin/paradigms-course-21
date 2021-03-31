@@ -1,28 +1,42 @@
 function Const(value) {
     this.value = value;
 }
+
 Const.prototype = {
-    evaluate: function () {return this.value;},
-    diff: function () {return new Const(0);},
-    toString: function () {return this.value.toString()}
+    evaluate: function () {
+        return this.value;
+    },
+    diff: function () {
+        return new Const(0);
+    },
+    toString: function () {
+        return this.value.toString()
+    }
 }
 
 const VARS = {
-    "x":0,
-    "y":1,
-    "z":2
+    "x": 0,
+    "y": 1,
+    "z": 2
 }
 
-function Variable(name){
+function Variable(name) {
     this.name = name;
 }
+
 Variable.prototype = {
-    evaluate: function (...args) {return args[VARS[this.name]];},
-    diff: function (difVar) {return new Const(difVar === this.name? 1: 0);},
-    toString: function () {return this.name;}
+    evaluate: function (...args) {
+        return args[VARS[this.name]];
+    },
+    diff: function (difVar) {
+        return new Const(difVar === this.name ? 1 : 0);
+    },
+    toString: function () {
+        return this.name;
+    }
 }
 
-function Binary(op1, op2, f){
+function Binary(op1, op2, f) {
     this.left = op1;
     this.right = op2;
     this.operation = f;
@@ -31,48 +45,56 @@ function Binary(op1, op2, f){
     }
 }
 
-const process = (f, ...args) => (...vars) =>{
-    let res = args[0].evaluate(...vars);
-    for(let i = 1; i < args.length; i++){
-        res = f(res, args[i].evaluate(...vars));
-    }
-    return res;
-}
-
-function binString(op, sign){
+function binString(op, sign) {
     return op.left.toString() + " " + op.right.toString() + " " + sign;
 }
 
-function Add(op1, op2){
+function Add(op1, op2) {
     Binary.call(this, op1, op2, (a, b) => a + b);
 }
+
 Add.prototype = {
     //evaluate: function (...vars) {return process((a, b) => a + b, this.left, this.right)(...vars)},
-    diff: function (difVar) {return new Add(this.left.diff(difVar), this.right.diff(difVar))},
-    toString: function () {return binString(this, '+')}
+    diff: function (difVar) {
+        return new Add(this.left.diff(difVar), this.right.diff(difVar))
+    },
+    toString: function () {
+        return binString(this, '+')
+    }
 }
 
-function Subtract(op1, op2){
+function Subtract(op1, op2) {
     Binary.call(this, op1, op2, (a, b) => a - b);
 }
+
 Subtract.prototype = {
     //evaluate: function (...vars) {return process((a, b) => a - b, this.left, this.right)(...vars)},
-    diff: function (difVar) {return new Subtract(this.left.diff(difVar), this.right.diff(difVar))},
-    toString: function () {return binString(this, '-')}
+    diff: function (difVar) {
+        return new Subtract(this.left.diff(difVar), this.right.diff(difVar))
+    },
+    toString: function () {
+        return binString(this, '-')
+    }
 }
 
-function Multiply(op1, op2){
+function Multiply(op1, op2) {
     Binary.call(this, op1, op2, (a, b) => a * b);
 }
+
 Multiply.prototype = {
     //evaluate: function (...vars) {return process((a, b) => a * b, this.left, this.right)(...vars)},
-    diff: function (difVar) {return new Add(new Multiply(this.left, this.right.diff(difVar)), new Multiply(this.left.diff(difVar), this.right))},
-    toString: function () {return binString(this, '*')}
+    diff: function (difVar) {
+        return new Add(new Multiply(this.left, this.right.diff(difVar)), new Multiply(this.left.diff(difVar), this.right))
+    },
+    toString: function () {
+        return binString(this, '*')
+    }
 }
 
-function Divide(op1, op2){
+function Divide(op1, op2) {
     Binary.call(this, op1, op2, (a, b) => a / b);
 }
+
 Divide.prototype = {
     //evaluate: function (...vars) {return process((a, b) => a / b, this.left, this.right)(...vars)},
     diff: function (difVar) {
@@ -81,52 +103,68 @@ Divide.prototype = {
         return new Divide(
             new Subtract(
                 new Multiply(dl, this.right)
-                ,new Multiply(this.left, dr)
+                , new Multiply(this.left, dr)
             )
-            ,new Multiply(this.right, this.right)
+            , new Multiply(this.right, this.right)
         )
     },
-    toString: function () {return binString(this, '/')}
+    toString: function () {
+        return binString(this, '/')
+    }
 }
 
-function Negate(op){
+function Negate(op) {
     this.op = op;
 }
+
 Negate.prototype = {
-    evaluate: function (...vars) {return process(a => -a, this.op, this.op)(...vars)},
-    diff: function (difVar) {return new Negate(this.op.diff(difVar))},
-    toString: function () {return this.op.toString() + " negate"}
+    evaluate: function (...vars) {
+        return -this.op.evaluate(...vars)
+    },
+    diff: function (difVar) {
+        return new Negate(this.op.diff(difVar))
+    },
+    toString: function () {
+        return this.op.toString() + " negate"
+    }
 }
 
-function Cube(op){
+function Cube(op) {
     this.op = op;
 }
+
 Cube.prototype = {
-    evaluate: function (...vars) {return this.op.evaluate(...vars)**3},
-    diff: function (difVar) {return new Multiply(
-        new Const(3),
-        new Multiply(
-            this.op.diff(difVar),
+    evaluate: function (...vars) {
+        return this.op.evaluate(...vars) ** 3
+    },
+    diff: function (difVar) {
+        return new Multiply(
+            new Const(3),
             new Multiply(
-                this.op,
-                this.op
+                this.op.diff(difVar),
+                new Multiply(
+                    this.op,
+                    this.op
+                )
             )
         )
-    )
     },
-    toString: function (){
+    toString: function () {
         return this.op.toString() + " cube";
     }
 }
 
-function Cbrt(op){
+function Cbrt(op) {
     this.op = op;
 }
+
 Cbrt.prototype = {
-    evaluate: function (...vars) {return Math.cbrt(this.op.evaluate(...vars))},
+    evaluate: function (...vars) {
+        return Math.cbrt(this.op.evaluate(...vars))
+    },
     diff: function (difVar) {
         return new Multiply(
-            new Const(1/3),
+            new Const(1 / 3),
             new Divide(
                 this.op.diff(difVar),
                 new Multiply(this, this)
@@ -151,19 +189,17 @@ const OPS = {
 
 const parse = expression => {
     let stack = [];
-    for(const token of expression.trim().split(/\s+/)){
-        if(token in OPS){
+    for (const token of expression.trim().split(/\s+/)) {
+        if (token in OPS) {
             const op = OPS[token];
             let args = [];
-            for(let i = 0; i < op[1]; i++){
+            for (let i = 0; i < op[1]; i++) {
                 args.unshift(stack.pop());
             }
             stack.push(new op[0](...args));
-        }
-        else if(token in VARS) {
+        } else if (token in VARS) {
             stack.push(new Variable(token));
-        }
-        else{
+        } else {
             stack.push(new Const(parseInt(token)));
         }
     }
