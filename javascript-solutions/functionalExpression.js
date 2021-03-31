@@ -1,30 +1,27 @@
 'use strict';
 
-const process = (f, arr, neutral) => {
-    for(const elem of arr){
-        neutral = f(neutral, elem);
-    }
-    return neutral;
-}
 
-// :NOTE: вынести общий код у операций
 const cnst = value => _ => value;
 const variable = (name) => (...args) => args[VARS[name]];
-const add = (op1, op2) => (...args) => op1(...args) + op2(...args);
-const subtract = (op1, op2) => (...args) => op1(...args) - op2(...args);
-const multiply = (op1, op2) => (...args) => op1(...args) * op2(...args);
-const divide = (op1, op2) => (...args) => op2(...args) === 0 ? Infinity : op1(...args) / op2(...args);
-const negate = (op) => (...args) => -op(...args);
-const one = _ => 1;
-const two = _ => 2;
-// :NOTE: обобщить с бинарными операциями
-const min5 = (op1, op2, op3, op4, op5) => (...args) => process(Math.min, [op1(...args)
-    , op2(...args)
-    , op3(...args)
-    , op4(...args)
-    , op5(...args)]
-    , Infinity)
-const max3 = (op1, op2, op3) => (...args) => process(Math.max, [op1(...args), op2(...args), op3(...args)], -Infinity)
+
+const operation = (f, ...args) => (...vars) =>{
+    let res = args[0](...vars);
+    for(let i = 1; i < args.length; i++){
+        res = f(res, args[i](...vars));
+    }
+    return res;
+}
+
+const add = (...operands) => operation((a, b) => a + b, ...operands);
+const subtract = (...operands) => operation((a, b) => a - b, ...operands);
+const multiply = (...operands) => operation((a, b) => a * b, ...operands);
+const divide = (...operands) => operation((a, b) => a / b, ...operands);
+const negate = operand => operation(a => -a, operand, operand);
+const min5 = (...operands) => operation(Math.min, ...operands);
+const max3 = (...operands) => operation(Math.max, ...operands);
+
+const one = cnst(1);
+const two = cnst(2);
 
 const OPS = {
     '*': [multiply, 2],
@@ -48,11 +45,8 @@ const VARS = {
 };
 
 const parse = expression => {
-    // :NOTE: костыль
-    const tokens = expression.split(' ').filter(element => element.length !== 0);
     let stack = [];
-    for(const token of tokens){
-        //println('\''+ token + '\'');
+    for(const token of expression.trim().split(/\s+/)){
         if(token in OPS){
             const op = OPS[token];
             let args = [];
@@ -71,6 +65,5 @@ const parse = expression => {
             stack.push(cnst(parseInt(token)));
         }
     }
-    //println(stack);
     return stack.pop();
 }
